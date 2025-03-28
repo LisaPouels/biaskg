@@ -92,4 +92,7 @@ for i in range(len(df_prompts)):
 # df_prompts['RAG_Answer'] = rag_answers
 # print(df_prompts[['question', 'context', 'RAG_Answer', 'context_condition']].head(10))
 print(df_answers.head(10))
+
+#save the dataframe to a csv file, remove enters from the text
+df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
 df_answers.to_csv("Data/bbq_rag_answers.csv", index=False)
