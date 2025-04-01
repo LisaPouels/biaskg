@@ -86,7 +86,7 @@ for i in range(len(df_prompts)):
     question = df_prompts.iloc[i]['question']
     context = df_prompts.iloc[i]['context']
     answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
-    query_text = f"{context} {question} Choose one of the following options: {answer_options}"
+    query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
 
     response = rag.search(query_text=query_text, retriever_config={"top_k": 3}, return_context=True)
     # add response to df_answers together with the context and question
