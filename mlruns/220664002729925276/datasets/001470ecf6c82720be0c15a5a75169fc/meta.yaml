@@ -1,0 +1,16 @@
+digest: 32f915f7
+name: bbq_sample
+profile: '{"num_rows": 20, "num_elements": 280}'
+schema: '{"mlflow_colspec": [{"type": "long", "name": "index", "required": true},
+  {"type": "long", "name": "example_id", "required": true}, {"type": "long", "name":
+  "question_index", "required": true}, {"type": "string", "name": "question_polarity",
+  "required": true}, {"type": "string", "name": "context_condition", "required": true},
+  {"type": "string", "name": "category", "required": true}, {"type": "string", "name":
+  "answer_info", "required": true}, {"type": "string", "name": "additional_metadata",
+  "required": true}, {"type": "string", "name": "context", "required": true}, {"type":
+  "string", "name": "question", "required": true}, {"type": "string", "name": "ans0",
+  "required": true}, {"type": "string", "name": "ans1", "required": true}, {"type":
+  "string", "name": "ans2", "required": true}, {"type": "long", "name": "label", "required":
+  true}]}'
+source: '{"uri": "bbq_sample.csv"}'
+source_type: local

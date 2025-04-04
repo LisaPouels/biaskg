@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/e114d42fc0c54a2398f593a796c2b7d5/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: e114d42fc0c54a2398f593a796c2b7d5
+run_name: redolent-yak-511
+run_uuid: e114d42fc0c54a2398f593a796c2b7d5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743754802113
+status: 1
+tags: []
+user_id: lisap

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/f0b45e0a40ba4b9d807543b807b15b03/artifacts
+end_time: 1743757538613
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: f0b45e0a40ba4b9d807543b807b15b03
+run_name: bold-bee-430
+run_uuid: f0b45e0a40ba4b9d807543b807b15b03
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743757535903
+status: 3
+tags: []
+user_id: lisap

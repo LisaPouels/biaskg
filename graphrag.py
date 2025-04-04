@@ -12,6 +12,7 @@ import neo4j
 import pandas as pd
 from dotenv import load_dotenv
 import mlflow
+from mlflow.data.pandas_dataset import PandasDataset
 
 # Set the experiment name
 mlflow.set_experiment("GraphRAG_Experiment")
@@ -39,14 +40,15 @@ driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
 embedder = OllamaEmbeddings(model="nomic-embed-text")
 
 # 3. LLM
-llm = OllamaLLM(
-    model_name=model,
-)
-# llm = OpenAILLM(
+# llm = OllamaLLM(
 #     model_name=model,
-#     model_params={"temperature": 0},
-#     base_url="http://localhost:11434/v1",
 # )
+# Using OpenAI LLM ensures mlflow can track the traces. It still runs locally.
+llm = OpenAILLM(
+    model_name=model,
+    model_params={"temperature": 0},
+    base_url="http://localhost:11434/v1",
+)
 
 
 
@@ -86,21 +88,43 @@ retriever = VectorCypherRetriever(
 
 # Initialize the RAG pipeline
 rag = GraphRAG(retriever=retriever, llm=llm)
+
+
+# Query using bbq data
+df_bbq = pd.read_csv("Data/bbq_sample.csv")
+df_prompts = df_bbq.sample(20, random_state=42).reset_index(drop=True)  #sample data
+
+dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
+
+df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
+
 with mlflow.start_run():
-    # Query using bbq data
-    df_bbq = pd.read_csv("Data/bbq_sample.csv")
-    #sample data
-    df_prompts = df_bbq.sample(20, random_state=42).reset_index(drop=True)
-    # df_prompts['RAG_Answer'] = None
-    df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
+    mlflow.log_param("model", model)
+    mlflow.log_param("retriever", "VectorCypherRetriever")
+    mlflow.log_param("embedder model", "nomic-embed-text")
+    mlflow.log_param("retrieval query", retrieval_query)
+    mlflow.log_param("sample size", len(df_prompts))
+    mlflow.log_input(dataset)
+
     # rag_answers = []
     for i in range(len(df_prompts)):
+        mlflow.start_run(run_name=f"bbq_experiment_{i}", nested=True)
+        mlflow.log_param("question", df_prompts.iloc[i]['question'])
+        mlflow.log_param("context", df_prompts.iloc[i]['context'])
+        mlflow.log_param("ans0", df_prompts.iloc[i]['ans0'])
+        mlflow.log_param("ans1", df_prompts.iloc[i]['ans1'])
+        mlflow.log_param("ans2", df_prompts.iloc[i]['ans2'])
+        mlflow.log_param("label", df_prompts.iloc[i]['label'])
+        mlflow.log_param("context_condition", df_prompts.iloc[i]['context_condition'])
+        mlflow.log_param("question_polarity", df_prompts.iloc[i]['question_polarity'])
+        mlflow.log_param("category", df_prompts.iloc[i]['category'])
         question = df_prompts.iloc[i]['question']
         context = df_prompts.iloc[i]['context']
         answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
         query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
 
         response = rag.search(query_text=query_text, retriever_config={"top_k": 3}, return_context=True)
+        mlflow.log_param("Answer", response.answer)
         # add response to df_answers together with the context and question
         df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 
@@ -112,3 +136,4 @@ with mlflow.start_run():
     df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
     timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
     df_answers.to_csv(f"Experiments/{model}_{timestamp}_bbq_experiment.csv", index=False)
+    mlflow.log_artifact(f"Experiments/{model}_{timestamp}_bbq_experiment.csv")

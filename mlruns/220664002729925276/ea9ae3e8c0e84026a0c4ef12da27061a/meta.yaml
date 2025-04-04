@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/ea9ae3e8c0e84026a0c4ef12da27061a/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: ea9ae3e8c0e84026a0c4ef12da27061a
+run_name: masked-lamb-363
+run_uuid: ea9ae3e8c0e84026a0c4ef12da27061a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743757630477
+status: 1
+tags: []
+user_id: lisap
