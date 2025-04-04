@@ -108,25 +108,25 @@ with mlflow.start_run():
 
     # rag_answers = []
     for i in range(len(df_prompts)):
-        mlflow.start_run(run_name=f"bbq_experiment_{i}", nested=True)
-        mlflow.log_param("question", df_prompts.iloc[i]['question'])
-        mlflow.log_param("context", df_prompts.iloc[i]['context'])
-        mlflow.log_param("ans0", df_prompts.iloc[i]['ans0'])
-        mlflow.log_param("ans1", df_prompts.iloc[i]['ans1'])
-        mlflow.log_param("ans2", df_prompts.iloc[i]['ans2'])
-        mlflow.log_param("label", df_prompts.iloc[i]['label'])
-        mlflow.log_param("context_condition", df_prompts.iloc[i]['context_condition'])
-        mlflow.log_param("question_polarity", df_prompts.iloc[i]['question_polarity'])
-        mlflow.log_param("category", df_prompts.iloc[i]['category'])
-        question = df_prompts.iloc[i]['question']
-        context = df_prompts.iloc[i]['context']
-        answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
-        query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
+        with mlflow.start_run(run_name=f"bbq_experiment_{i}", nested=True):
+            mlflow.log_param("question", df_prompts.iloc[i]['question'])
+            mlflow.log_param("context", df_prompts.iloc[i]['context'])
+            mlflow.log_param("ans0", df_prompts.iloc[i]['ans0'])
+            mlflow.log_param("ans1", df_prompts.iloc[i]['ans1'])
+            mlflow.log_param("ans2", df_prompts.iloc[i]['ans2'])
+            mlflow.log_param("label", df_prompts.iloc[i]['label'])
+            mlflow.log_param("context_condition", df_prompts.iloc[i]['context_condition'])
+            mlflow.log_param("question_polarity", df_prompts.iloc[i]['question_polarity'])
+            mlflow.log_param("category", df_prompts.iloc[i]['category'])
+            question = df_prompts.iloc[i]['question']
+            context = df_prompts.iloc[i]['context']
+            answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
+            query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
 
-        response = rag.search(query_text=query_text, retriever_config={"top_k": 3}, return_context=True)
-        mlflow.log_param("Answer", response.answer)
-        # add response to df_answers together with the context and question
-        df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
+            response = rag.search(query_text=query_text, retriever_config={"top_k": 3}, return_context=True)
+            mlflow.log_param("Answer", response.answer)
+            # add response to df_answers together with the context and question
+            df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 
     # df_prompts['RAG_Answer'] = rag_answers
     # print(df_prompts[['question', 'context', 'RAG_Answer', 'context_condition']].head(10))
