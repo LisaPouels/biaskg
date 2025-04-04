@@ -1,4 +1,4 @@
-from neo4j_graphrag.llm import LLMResponse, OllamaLLM
+from neo4j_graphrag.llm import LLMResponse, OllamaLLM, OpenAILLM
 from neo4j import GraphDatabase
 from neo4j_graphrag.retrievers import VectorRetriever, Text2CypherRetriever, VectorCypherRetriever
 from neo4j_graphrag.generation import GraphRAG
@@ -11,6 +11,12 @@ from neo4j_graphrag.retrievers.base import RetrieverResultItem
 import neo4j
 import pandas as pd
 from dotenv import load_dotenv
+import mlflow
+
+# Set the experiment name
+mlflow.set_experiment("GraphRAG_Experiment")
+mlflow.openai.autolog()
+
 # Load environment variables from .env file
 load_dotenv(override=True)
 
@@ -33,10 +39,16 @@ driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
 embedder = OllamaEmbeddings(model="nomic-embed-text")
 
 # 3. LLM
-# Note: the OPENAI_API_KEY must be in the env vars
-llm = OllamaLLM(
+# llm = OllamaLLM(
+#     model_name=model,
+# )
+llm = OpenAILLM(
     model_name=model,
+    model_params={"temperature": 0},
+    base_url="http://localhost:11434/v1",
 )
+
+
 
 # Initialize the retriever
 # retriever = VectorRetriever(driver, INDEX_NAME, embedder)
