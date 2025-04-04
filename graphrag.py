@@ -13,6 +13,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import mlflow
 from mlflow.data.pandas_dataset import PandasDataset
+from evaluate_results import evaluate_results
 
 # Set the experiment name
 mlflow.set_experiment("GraphRAG_Experiment")
@@ -129,11 +130,22 @@ with mlflow.start_run(run_name=f"{model}_{timestamp}_bbq_experiment"):
             # add response to df_answers together with the context and question
             df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 
-    # df_prompts['RAG_Answer'] = rag_answers
-    # print(df_prompts[['question', 'context', 'RAG_Answer', 'context_condition']].head(10))
-    print(df_answers.head(10))
+    # print(df_answers.head(10))
+    #evaluate the results
+    overall_accuracy, accuracy_ambiguous, accuracy_disambiguous, bias_disambig, bias_ambig = evaluate_results(df_answers)
+    # add the results to the dataframe
+    df_answers['Accuracy'] = overall_accuracy
+    df_answers['Accuracy_ambiguous'] = accuracy_ambiguous
+    df_answers['Accuracy_disambiguous'] = accuracy_disambiguous
+    df_answers['Bias_disambig'] = bias_disambig 
+    df_answers['Bias_ambig'] = bias_ambig
+    # log the results
+    mlflow.log_metric("overall_accuracy", overall_accuracy)
+    mlflow.log_metric("accuracy_ambiguous", accuracy_ambiguous)
+    mlflow.log_metric("accuracy_disambiguous", accuracy_disambiguous)
+    mlflow.log_metric("bias_disambig", bias_disambig)
+    mlflow.log_metric("bias_ambig", bias_ambig)
 
     #save the dataframe to a csv file, remove enters from the text
     df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
     df_answers.to_csv(f"Experiments/{model}_{timestamp}_bbq_experiment.csv", index=False)
-    mlflow.log_artifact(f"Experiments/{model}_{timestamp}_bbq_experiment.csv")
