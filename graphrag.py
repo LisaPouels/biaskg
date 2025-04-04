@@ -97,8 +97,9 @@ df_prompts = df_bbq.sample(20, random_state=42).reset_index(drop=True)  #sample 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
 df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
+timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
-with mlflow.start_run():
+with mlflow.start_run(run_name=f"{model}_{timestamp}_bbq_experiment"):
     mlflow.log_param("model", model)
     mlflow.log_param("retriever", "VectorCypherRetriever")
     mlflow.log_param("embedder model", "nomic-embed-text")
@@ -134,6 +135,5 @@ with mlflow.start_run():
 
     #save the dataframe to a csv file, remove enters from the text
     df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-    timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
     df_answers.to_csv(f"Experiments/{model}_{timestamp}_bbq_experiment.csv", index=False)
     mlflow.log_artifact(f"Experiments/{model}_{timestamp}_bbq_experiment.csv")
