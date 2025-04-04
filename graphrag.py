@@ -39,14 +39,14 @@ driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
 embedder = OllamaEmbeddings(model="nomic-embed-text")
 
 # 3. LLM
-# llm = OllamaLLM(
-#     model_name=model,
-# )
-llm = OpenAILLM(
+llm = OllamaLLM(
     model_name=model,
-    model_params={"temperature": 0},
-    base_url="http://localhost:11434/v1",
 )
+# llm = OpenAILLM(
+#     model_name=model,
+#     model_params={"temperature": 0},
+#     base_url="http://localhost:11434/v1",
+# )
 
 
 
