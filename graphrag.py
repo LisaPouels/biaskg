@@ -17,6 +17,7 @@ from evaluate_results import evaluate_results
 from vertexai.generative_models import GenerationConfig
 import google.generativeai as genai
 from gemini_llm import GeminiLLM
+from time import sleep
 
 # Set the experiment name
 mlflow.set_experiment("GraphRAG_Experiment")
@@ -24,46 +25,34 @@ mlflow.set_experiment("GraphRAG_Experiment")
 # Load environment variables from .env file
 load_dotenv(override=True)
 
-# 1. Neo4j driver
-# URI = "neo4j://localhost:7687"
-# AUTH = ("neo4j", "password")
+# Set the index name
+INDEX_NAME = "startIndex"
+
+# 1. Knowledge Graph connection
+# Load environment variables
 neo4j_uri = os.getenv("NEO4J_URI")
 neo4j_user = os.getenv("NEO4J_USERNAME")
 neo4j_password = os.getenv("NEO4J_PASSWORD")
-model = os.getenv("MODEL")
-print(f"Using model: {model}")
 
-INDEX_NAME = "startIndex"
+driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password)) # connect to the database
 
-# Connect to Neo4j database
-driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+# 2. Embedding
+embedder = OllamaEmbeddings(model="nomic-embed-text") # set the embedding model
 
-# 2. Retriever
-# Create Embedder object, needed to convert the user question (text) to a vector
-embedder = OllamaEmbeddings(model="nomic-embed-text")
-
-# 3. LLM
-if model == "gemini-2.0-flash":
-    mlflow.gemini.autolog()
-    llm = GeminiLLM(model_name=model)
-else:
-    mlflow.openai.autolog()
-    # llm = OllamaLLM(
-    #     model_name=model,
-    # )
-    # Using OpenAI LLM ensures mlflow can track the traces. It still runs locally.
-    llm = OpenAILLM(
-        model_name=model,
-        model_params={"temperature": 0},
-        base_url="http://localhost:11434/v1",
-    )
-
-
-
-# Initialize the retriever
-# retriever = VectorRetriever(driver, INDEX_NAME, embedder)
-# retriever = Text2CypherRetriever(driver, llm=llm)
+# 3. Retriever
 def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
+    """
+    Format the result from the database query into a RetrieverResultItem.
+    The retrieved start nodes are connected to an edge (relationship) and an end node.
+    The retrieved end nodes are connected to the start node with an edge (relationship).
+
+    Args:
+        record (neo4j.Record): The record returned from the database query.
+    Returns:
+        RetrieverResultItem: The formatted result item. This includes the content and metadata.
+    The content is a string that contains the start node, the relationship, and the end node.
+    The metadata includes the start node and the score.
+    """
     content=""
     for i in range(len(record.get('node_rel'))):
         content += f"{record.get('node')} {record.get('node_rel')[i]} {record.get('e')[i]},"
@@ -77,6 +66,7 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
         }
     )
 
+# define the retrieval query
 retrieval_query = """
     RETURN 
         node.text AS node, 
@@ -86,6 +76,7 @@ retrieval_query = """
         COLLECT {MATCH (s:StartNode)-[r:RELATIONSHIP]-(node) RETURN s.text} AS s,
         COLLECT {MATCH (s:StartNode)-[r:RELATIONSHIP]-(node) RETURN r.text} AS rel_node
 """
+# initialize the retriever
 retriever = VectorCypherRetriever(
     driver=driver,
     index_name=INDEX_NAME,
@@ -94,56 +85,80 @@ retriever = VectorCypherRetriever(
     result_formatter=result_formatter,
 )
 
-# Initialize the RAG pipeline
-rag = GraphRAG(retriever=retriever, llm=llm)
-
-
-# Query using bbq data
+# 4. Load the user prompts
 df_bbq = pd.read_csv("Data/bbq_sample.csv")
 df_prompts = df_bbq.sample(15, random_state=42).reset_index(drop=True)  #sample data
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
+# 5. Create a dataframe to store the answers
 df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
-# models = ["mistral", "llama3.2", "qwen2.5", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-# k = [2,3,5,10]
+models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
+k_values = [2,3,5,10]
+sleep_time = 0
 
-with mlflow.start_run(run_name=f"{model}_{timestamp}_bbq_experiment"):
-    mlflow.log_param("model", model)
-    mlflow.log_param("retriever", "VectorCypherRetriever")
-    mlflow.log_param("embedder model", "nomic-embed-text")
-    mlflow.log_param("retrieval query", retrieval_query)
-    mlflow.log_param("sample size", len(df_prompts))
-    mlflow.log_input(dataset)
+# 6. Loop through the models and k values
+for model in models:
+    print(f"Running experiments for LLM: {model}")
+    for k in k_values:
+        print(f"Running experiments for k={k}")
 
-    for i in range(len(df_prompts)):
-        question = df_prompts.iloc[i]['question']
-        context = df_prompts.iloc[i]['context']
-        answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
-        query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
+        # Initialize the LLM
+        if model == "gemini-2.0-flash":
+            sleep(sleep_time) # sleep to avoid rate limiting for Gemini
+            sleep_time = 60
+            mlflow.gemini.autolog()
+            llm = GeminiLLM(model_name=model)
+        else:
+            sleep_time = 0
+            mlflow.openai.autolog()
+            # Using OpenAI LLM ensures mlflow can track the traces. It still runs locally.
+            llm = OpenAILLM(
+                model_name=model,
+                model_params={"temperature": 0},
+                base_url="http://localhost:11434/v1",
+            )
 
-        response = rag.search(query_text=query_text, retriever_config={"top_k": 3}, return_context=True)
-        # add response to df_answers together with the context and question
-        df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
+        # Initialize the RAG pipeline
+        rag = GraphRAG(retriever=retriever, llm=llm)
 
-    # print(df_answers.head(10))
-    #evaluate the results
-    overall_accuracy, accuracy_ambiguous, accuracy_disambiguous, bias_disambig, bias_ambig = evaluate_results(df_answers)
-    # add the results to the dataframe
-    df_answers['Accuracy'] = overall_accuracy
-    df_answers['Accuracy_ambiguous'] = accuracy_ambiguous
-    df_answers['Accuracy_disambiguous'] = accuracy_disambiguous
-    df_answers['Bias_disambig'] = bias_disambig 
-    df_answers['Bias_ambig'] = bias_ambig
-    # log the results
-    mlflow.log_metric("overall_accuracy", overall_accuracy)
-    mlflow.log_metric("accuracy_ambiguous", accuracy_ambiguous)
-    mlflow.log_metric("accuracy_disambiguous", accuracy_disambiguous)
-    mlflow.log_metric("bias_disambig", bias_disambig)
-    mlflow.log_metric("bias_ambig", bias_ambig)
+        with mlflow.start_run(run_name=f"{model}_k{k}_{timestamp}_bbq_experiment"):
+            mlflow.log_param("model", model)
+            mlflow.log_param("retriever", "VectorCypherRetriever")
+            mlflow.log_param("embedder model", "nomic-embed-text")
+            mlflow.log_param("retrieval query", retrieval_query)
+            mlflow.log_param("sample size", len(df_prompts))
+            mlflow.log_param("k", k)
+            mlflow.log_input(dataset)
 
-    #save the dataframe to a csv file, remove enters from the text
-    df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-    df_answers.to_csv(f"Experiments/{model}_{timestamp}_bbq_experiment.csv", index=False)
+            for i in range(len(df_prompts)):
+                question = df_prompts.iloc[i]['question']
+                context = df_prompts.iloc[i]['context']
+                answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
+                query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
+
+                response = rag.search(query_text=query_text, retriever_config={"top_k": k}, return_context=True)
+                # add response to df_answers together with the context and question
+                df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
+
+            # print(df_answers.head(10))
+            #evaluate the results
+            overall_accuracy, accuracy_ambiguous, accuracy_disambiguous, bias_disambig, bias_ambig = evaluate_results(df_answers)
+            # add the results to the dataframe
+            df_answers['Accuracy'] = overall_accuracy
+            df_answers['Accuracy_ambiguous'] = accuracy_ambiguous
+            df_answers['Accuracy_disambiguous'] = accuracy_disambiguous
+            df_answers['Bias_disambig'] = bias_disambig 
+            df_answers['Bias_ambig'] = bias_ambig
+            # log the results
+            mlflow.log_metric("overall_accuracy", overall_accuracy)
+            mlflow.log_metric("accuracy_ambiguous", accuracy_ambiguous)
+            mlflow.log_metric("accuracy_disambiguous", accuracy_disambiguous)
+            mlflow.log_metric("bias_disambig", bias_disambig)
+            mlflow.log_metric("bias_ambig", bias_ambig)
+
+            #save the dataframe to a csv file, remove enters from the text
+            df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
+            df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/d5fc408c889140169e17306eee70ea4a/artifacts
+end_time: 1744123451159
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: d5fc408c889140169e17306eee70ea4a
+run_name: mistral_k2_0408_1644_bbq_experiment
+run_uuid: d5fc408c889140169e17306eee70ea4a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744123447128
+status: 3
+tags: []
+user_id: lisap
