@@ -1,0 +1,17 @@
+digest: c3dd1b94
+name: bbq_sample
+profile: '{"num_rows": 100, "num_elements": 1400}'
+schema: '{"mlflow_colspec": [{"type": "long", "name": "index", "required": true},
+  {"type": "long", "name": "example_id", "required": true}, {"type": "long", "name":
+  "question_index", "required": true}, {"type": "string", "name": "question_polarity",
+  "required": true}, {"type": "string", "name": "context_condition", "required": true},
+  {"type": "string", "name": "category", "required": true}, {"type": "string", "name":
+  "answer_info", "required": true}, {"type": "string", "name": "additional_metadata",
+  "required": true}, {"type": "string", "name": "context", "required": true}, {"type":
+  "string", "name": "question", "required": true}, {"type": "string", "name": "ans0",
+  "required": true}, {"type": "string", "name": "ans1", "required": true}, {"type":
+  "string", "name": "ans2", "required": true}, {"type": "long", "name": "label", "required":
+  true}]}'
+source: '{"tags": {"mlflow.user": "lisap", "mlflow.source.name": "/home/lisap/biaskg/graphrag.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "9e5b24fc4d066501089427cc1444ca5df6c5947e"}}'
+source_type: code
