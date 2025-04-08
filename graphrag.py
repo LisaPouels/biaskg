@@ -45,14 +45,6 @@ embedder = OllamaEmbeddings(model="nomic-embed-text")
 # 3. LLM
 if model == "gemini-2.0-flash":
     mlflow.gemini.autolog()
-    # generation_config = GenerationConfig(temperature=0.0)
-    # llm = VertexAILLM(
-    #     model_name=model,
-    #     generation_config=generation_config,
-    # )
-    
-    # genai.configure(api_key=os.getenv("GENAI_API_KEY"))
-    # llm = genai.GenerativeModel(model)
     llm = GeminiLLM(model_name=model)
 else:
     mlflow.openai.autolog()
