@@ -95,13 +95,20 @@ dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
-models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-k_values = [2,3,5,10]
+models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
+# models = ["deepseek-r1"]
 sleep_time = 0
 
 # 6. Loop through the models and k values
 for model in models:
     print(f"Running experiments for LLM: {model}")
+    if model == "falcon":
+        # Use only k=2 for Falcon, otherwise it will not work TODO: debug where it gets stuck
+        k_values = [2]
+    else:
+        k_values = [2,3,5,10]
+
+    # Loop through the k values
     for k in k_values:
         print(f"Running experiments for k={k}")
 
