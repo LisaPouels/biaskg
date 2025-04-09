@@ -95,8 +95,8 @@ dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
-models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-# models = ["deepseek-r1"]
+# models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
+models = ["mistral"]
 sleep_time = 0
 
 # 6. Loop through the models and k values
@@ -169,3 +169,4 @@ for model in models:
             #save the dataframe to a csv file, remove enters from the text
             df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
             df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+            mlflow.log_artifact(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv") 
