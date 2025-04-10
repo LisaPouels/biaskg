@@ -86,17 +86,20 @@ retriever = VectorCypherRetriever(
 )
 
 # 4. Load the user prompts
-df_bbq = pd.read_csv("Data/bbq_sample.csv")
-df_prompts = df_bbq.sample(15, random_state=42).reset_index(drop=True)  #sample data
+data_path = os.getenv("DATA_PATH")
+n_prompts = int(os.getenv("N_PROMPTS")) # number of prompts to sample
+
+df_bbq = pd.read_csv(data_path)
+df_prompts = df_bbq.sample(n_prompts, random_state=42).reset_index(drop=True)  #sample prompts, random_state=42 for reproducibility
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
 # 5. Create a dataframe to store the answers
-df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'retriever_result'])	
+df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'target_loc', 'retriever_result'])	
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
 # models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-models = ["mistral"]
+models = ["qwen2.5"]
 sleep_time = 0
 
 # 6. Loop through the models and k values
@@ -106,7 +109,8 @@ for model in models:
         # Use only k=2 for Falcon, otherwise it will not work TODO: debug where it gets stuck
         k_values = [2]
     else:
-        k_values = [2,3,5,10]
+        # k_values = [2,3,5,10]
+        k_values=[3]
 
     # Loop through the k values
     for k in k_values:
@@ -125,7 +129,7 @@ for model in models:
             llm = OpenAILLM(
                 model_name=model,
                 model_params={"temperature": 0},
-                base_url="http://localhost:11434/v1",
+                base_url=os.getenv("BASE_URL_OLLAMA"),
             )
 
         # Initialize the RAG pipeline
@@ -148,21 +152,23 @@ for model in models:
 
                 response = rag.search(query_text=query_text, retriever_config={"top_k": k}, return_context=True)
                 # add response to df_answers together with the context and question
-                df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
+                df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'target_loc': df_prompts.iloc[i]['target_loc'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 
             # print(df_answers.head(10))
             #evaluate the results
-            overall_accuracy, accuracy_ambiguous, accuracy_disambiguous, bias_disambig, bias_ambig = evaluate_results(df_answers)
+            overall_accuracy, accuracy_ambiguous, accuracy_disambiguated, accuracy_cost_bias_nonalignment, bias_disambig, bias_ambig = evaluate_results(df_answers)
             # add the results to the dataframe
             df_answers['Accuracy'] = overall_accuracy
             df_answers['Accuracy_ambiguous'] = accuracy_ambiguous
-            df_answers['Accuracy_disambiguous'] = accuracy_disambiguous
+            df_answers['Accuracy_disambiguous'] = accuracy_disambiguated
+            df_answers['Accuracy_cost_bias_nonalignment'] = accuracy_cost_bias_nonalignment
             df_answers['Bias_disambig'] = bias_disambig 
             df_answers['Bias_ambig'] = bias_ambig
             # log the results
             mlflow.log_metric("overall_accuracy", overall_accuracy)
             mlflow.log_metric("accuracy_ambiguous", accuracy_ambiguous)
-            mlflow.log_metric("accuracy_disambiguous", accuracy_disambiguous)
+            mlflow.log_metric("accuracy_disambiguous", accuracy_disambiguated)
+            mlflow.log_metric("accuracy_cost_bias_nonalignment", accuracy_cost_bias_nonalignment)
             mlflow.log_metric("bias_disambig", bias_disambig)
             mlflow.log_metric("bias_ambig", bias_ambig)
 

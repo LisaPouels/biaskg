@@ -1,0 +1,23 @@
+digest: c4da5818
+name: bbq_sample
+profile: '{"num_rows": 15, "num_elements": 330}'
+schema: '{"mlflow_colspec": [{"type": "long", "name": "example_id", "required": true},
+  {"type": "long", "name": "question_index", "required": true}, {"type": "string",
+  "name": "question_polarity", "required": true}, {"type": "string", "name": "context_condition",
+  "required": true}, {"type": "string", "name": "category", "required": true}, {"type":
+  "string", "name": "answer_info", "required": true}, {"type": "string", "name": "additional_metadata",
+  "required": true}, {"type": "string", "name": "context", "required": true}, {"type":
+  "string", "name": "question", "required": true}, {"type": "string", "name": "ans0",
+  "required": true}, {"type": "string", "name": "ans1", "required": true}, {"type":
+  "string", "name": "ans2", "required": true}, {"type": "long", "name": "label", "required":
+  true}, {"type": "double", "name": "target_loc", "required": true}, {"type": "string",
+  "name": "label_type", "required": true}, {"type": "double", "name": "Known_stereotyped_race",
+  "required": false}, {"type": "double", "name": "Known_stereotyped_var2", "required":
+  false}, {"type": "string", "name": "Relevant_social_values", "required": true},
+  {"type": "double", "name": "corr_ans_aligns_var2", "required": false}, {"type":
+  "double", "name": "corr_ans_aligns_race", "required": false}, {"type": "double",
+  "name": "full_cond", "required": false}, {"type": "string", "name": "Known_stereotyped_groups",
+  "required": true}]}'
+source: '{"tags": {"mlflow.user": "lisap", "mlflow.source.name": "/home/lisap/biaskg/graphrag.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "6c26a416dbc8c43c65e5992702437fc9ef55fe37"}}'
+source_type: code
