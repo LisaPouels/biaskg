@@ -88,6 +88,7 @@ retriever = VectorCypherRetriever(
 # 4. Load the user prompts
 data_path = os.getenv("DATA_PATH")
 n_prompts = int(os.getenv("N_PROMPTS")) # number of prompts to sample
+print(f"Sampling {n_prompts} prompts from {data_path}")
 
 df_bbq = pd.read_csv(data_path)
 df_prompts = df_bbq.sample(n_prompts, random_state=42).reset_index(drop=True)  #sample prompts, random_state=42 for reproducibility
