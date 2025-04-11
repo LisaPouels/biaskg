@@ -112,16 +112,23 @@ retriever = VectorCypherRetriever(
 
 # 4. Load the user prompts
 data_path = os.getenv("DATA_PATH")
-n_prompts = int(os.getenv("N_PROMPTS")) # number of prompts to sample
-print(f"Sampling {n_prompts} prompts from {data_path}")
+n_prompts = os.getenv("N_PROMPTS") # number of prompts to sample
 
 df_bbq = pd.read_csv(data_path)
-df_prompts = df_bbq.sample(n_prompts, random_state=42).reset_index(drop=True)  #sample prompts, random_state=42 for reproducibility
+if n_prompts == 'None' or n_prompts == None or n_prompts == "":
+    print(f"No number of prompts specified. Using all prompts.")
+    n_prompts = len(df_bbq) # if no number of prompts is specified, use all prompts
+if int(n_prompts) > len(df_bbq):
+    print(f"Number of prompts specified ({n_prompts}) is greater than the number of prompts in the dataset ({len(df_bbq)}). Using all prompts.")
+    n_prompts = len(df_bbq) # if no number of prompts is specified, use all prompts
+
+print(f"Sampling {n_prompts} prompts from {data_path}")
+df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=True)  #sample prompts, random_state=42 for reproducibility
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
-models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-# models = ["mistral"]
+# models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
+models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon"]
 sleep_time = 0
 k_values = [2,3,5,10]
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M") # set the timestamp for the experiment
