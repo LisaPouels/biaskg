@@ -54,10 +54,8 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
     The metadata includes the start node and the score.
     """
     content=""
-    for i in range(len(record.get('node_rel'))):
-        content += f"{record.get('node')} {record.get('node_rel')[i]} {record.get('e')[i]},"
-    for i in range(len(record.get('rel_node'))):
-        content += f"{record.get('s')[i]} {record.get('rel_node')[i]} {record.get('node')},"
+    for i in range(len(record.get('top_triplets'))):
+        content += f"{record.get('top_triplets')[i].get('subject')} {record.get('top_triplets')[i].get('relationship')} {record.get('top_triplets')[i].get('object')},"
     return RetrieverResultItem(
         content=content,
         metadata={
@@ -68,13 +66,40 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
 
 # define the retrieval query
 retrieval_query = """
-    RETURN 
-        node.text AS node, 
-        score,
-        COLLECT {MATCH (node)-[r:RELATIONSHIP]-(e:EndNode) RETURN r.text} AS node_rel,
-        COLLECT {MATCH (node)-[r:RELATIONSHIP]-(e:EndNode) RETURN e.text} AS e,
-        COLLECT {MATCH (s:StartNode)-[r:RELATIONSHIP]-(node) RETURN s.text} AS s,
-        COLLECT {MATCH (s:StartNode)-[r:RELATIONSHIP]-(node) RETURN r.text} AS rel_node
+    // Step 1: Find neighbors of the retrieved node
+    MATCH (node)-[r:RELATIONSHIP]->(e:EndNode)
+
+    // Step 2: Compute cosine similarity manually between input and e
+    WITH node, r, e,
+        gds.similarity.cosine(node.embedding, e.embedding) AS e_similarity,
+        score AS node_similarity // manually preserve the score for 'node'
+
+    // Step 3: Top-k neighbors based on similarity
+    ORDER BY e_similarity DESC
+    WITH node, node_similarity, COLLECT(DISTINCT {entity: e, sim: e_similarity})[0..$top_k] AS top_e
+
+    // Step 4: Combine node + top_e into one list
+    WITH node, node_similarity,
+        [{entity: node, sim: node_similarity}] + top_e AS nodes
+
+    UNWIND nodes AS entity_info
+    WITH node, entity_info.entity AS n, entity_info.sim AS similarity
+
+    // Step 5: Get all outgoing edges for all relevant nodes
+    MATCH (n)-[r1:RELATIONSHIP]->(e1:EndNode)
+
+    // Step 6: Collect and rank triplets
+    WITH node, n, r1, e1, similarity
+    ORDER BY similarity DESC
+    WITH node,
+        COLLECT({subject: n.text, relationship: r1.text, object: e1.text}) AS triplets,
+        AVG(similarity) AS avg_similarity
+
+    // Step 7: Return
+    RETURN
+        node.text AS node,
+        avg_similarity AS score,
+        triplets[0..$top_k] AS top_triplets
 """
 # initialize the retriever
 retriever = VectorCypherRetriever(
@@ -99,8 +124,8 @@ dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 df_answers = pd.DataFrame(columns=['context', 'question', 'ans0', 'ans1', 'ans2', 'label', 'RAG_Answer', 'context_condition', 'question_polarity', 'category', 'target_loc', 'retriever_result'])	
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M")
 
-models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-# models = ["qwen2.5"]
+# models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
+models = ["qwen2.5"]
 sleep_time = 0
 
 # 6. Loop through the models and k values
@@ -110,8 +135,8 @@ for model in models:
         # Use only k=2 for Falcon, otherwise it will not work TODO: debug where it gets stuck
         k_values = [2]
     else:
-        k_values = [2,3,5,10]
-        # k_values=[3]
+        # k_values = [2,3,5,10]
+        k_values=[3]
 
     # Loop through the k values
     for k in k_values:
@@ -151,7 +176,7 @@ for model in models:
                 answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
                 query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
 
-                response = rag.search(query_text=query_text, retriever_config={"top_k": k}, return_context=True)
+                response = rag.search(query_text=query_text, retriever_config={"top_k": k, "query_params": {"k": k}}, return_context=True)
                 # add response to df_answers together with the context and question
                 df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'target_loc': df_prompts.iloc[i]['target_loc'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 

@@ -1,0 +1,10 @@
+
+    MATCH (node)-[r:RELATIONSHIP]-(e:EndNode)
+    WITH node, r, e, e.similarity AS similarity
+    ORDER BY similarity DESC
+    WITH node, COLLECT(r.text) AS node_rel, COLLECT(e.text) AS e, COLLECT(similarity) AS scores
+    RETURN 
+        node.text AS node, 
+        scores[0..$k] AS score,
+        node_rel[0..$k] AS node_rel,
+        e[0..$k] AS e

@@ -1,0 +1,20 @@
+
+    MATCH (node)-[r:RELATIONSHIP]->(e:EndNode)
+    WITH node, r, e, e.similarity AS similarity
+    ORDER BY similarity DESC LIMIT $top_k
+    WITH node, COLLECT(DISTINCT e)[0..$top_k] AS top_e
+    WITH node, 
+        [{entity: node, sim: similarity} ] +
+        [item IN top_e | {entity: item, sim: item.similarity}] AS nodes
+    UNWIND nodes AS entities
+    WITH entities.entity AS n, entities.sim AS similarity
+    MATCH (n)-[r1:RELATIONSHIP]->(e1:EndNode)
+    WITH node, n, r1, e1
+    ORDER BY n.similarity DESC LIMIT $top_k
+    WITH node,
+        COLLECT({subject: n.text, relationship: r1.text, object: e1.text}) AS triplets,
+        AVG(n.similarity) AS avg_similarity
+    RETURN
+        node.text AS node,
+        avg_similarity AS score,
+        triplets[0..$top_k] AS top_triplets

@@ -1,0 +1,6 @@
+
+    RETURN 
+        node.text AS node, 
+        score,
+        COLLECT {MATCH (node)-[r:RELATIONSHIP]-(e:EndNode) RETURN r.text} AS node_rel,
+        COLLECT {MATCH (node)-[r:RELATIONSHIP]-(e:EndNode) RETURN e.text} AS e
