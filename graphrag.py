@@ -20,7 +20,7 @@ from gemini_llm import GeminiLLM
 from time import sleep
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment")
+mlflow.set_experiment("GraphRAG_Experiment1_LLMs")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -127,19 +127,18 @@ df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=Tru
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
-# models = ["mistral", "llama3.2", "qwen2.5", "gemini-2.0-flash", "deepseek-r1", "falcon"] # deepseek, gemma, llama3.2:1b and llama3.2:3b etc.
-models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon"]
+models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"]
+# models = ["gemini-2.0-flash"]
 sleep_time = 0
 k_values = [2,3,5,10]
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M") # set the timestamp for the experiment
 
 # 5. Loop through the models and k values
 for model in models:
-    print(f"Running experiments for LLM: {model}")
-
+    sample_size = len(df_prompts)
     # Loop through the k values
     for k in k_values:
-        print(f"Running experiments for k={k}")
+        print(f"Running experiments for LLM={model} with k={k}")
 
         # Initialize the LLM
         if model == "gemini-2.0-flash":
@@ -147,6 +146,14 @@ for model in models:
             sleep_time = 60
             mlflow.gemini.autolog()
             llm = GeminiLLM(model_name=model)
+            sample_size = 15  # select only the first 15 prompts for the gemini model
+        elif model == "gpt-4.1-nano":
+            sleep_time = 0
+            mlflow.openai.autolog()
+            llm = OpenAILLM(
+                model_name=model,
+                model_params={"temperature":0}
+            )
         else:
             sleep_time = 0
             mlflow.openai.autolog()
@@ -162,24 +169,27 @@ for model in models:
         # Initialize the RAG pipeline
         rag = GraphRAG(retriever=retriever, llm=llm)
 
+        # Select the prompts
+        prompts = df_prompts.iloc[:sample_size]
+
         with mlflow.start_run(run_name=f"{model}_k{k}_{timestamp}_bbq_experiment"):
             mlflow.log_param("model", model)
             mlflow.log_param("retriever", "VectorCypherRetriever")
             mlflow.log_param("embedder model", "nomic-embed-text")
             mlflow.log_param("retrieval query", retrieval_query)
-            mlflow.log_param("sample size", len(df_prompts))
+            mlflow.log_param("sample size", len(prompts))
             mlflow.log_param("k", k)
             mlflow.log_input(dataset)
 
-            for i in range(len(df_prompts)):
-                question = df_prompts.iloc[i]['question']
-                context = df_prompts.iloc[i]['context']
-                answer_options =  df_prompts.iloc[i]['ans0'],df_prompts.iloc[i]['ans1'],df_prompts.iloc[i]['ans2']
+            for i in range(len(prompts)):
+                question = prompts.iloc[i]['question']
+                context = prompts.iloc[i]['context']
+                answer_options =  prompts.iloc[i]['ans0'],prompts.iloc[i]['ans1'],prompts.iloc[i]['ans2']
                 query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
 
                 response = rag.search(query_text=query_text, retriever_config={"top_k": k, "query_params": {"k": k}}, return_context=True)
                 # add response to df_answers together with the context and question
-                df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': df_prompts.iloc[i]['ans0'], 'ans1': df_prompts.iloc[i]['ans1'], 'ans2': df_prompts.iloc[i]['ans2'], 'label': df_prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': df_prompts.iloc[i]['context_condition'], 'question_polarity': df_prompts.iloc[i]['question_polarity'], 'category': df_prompts.iloc[i]['category'], 'target_loc': df_prompts.iloc[i]['target_loc'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
+                df_answers = pd.concat([df_answers, pd.DataFrame({'context': context, 'question': question, 'ans0': prompts.iloc[i]['ans0'], 'ans1': prompts.iloc[i]['ans1'], 'ans2': prompts.iloc[i]['ans2'], 'label': prompts.iloc[i]['label'], 'RAG_Answer': response.answer, 'context_condition': prompts.iloc[i]['context_condition'], 'question_polarity': prompts.iloc[i]['question_polarity'], 'category': prompts.iloc[i]['category'], 'target_loc': prompts.iloc[i]['target_loc'], 'retriever_result': [response.retriever_result.items]}, index=[0])], ignore_index=True)
 
             # print(df_answers.head(10))
             #evaluate the results
@@ -201,4 +211,4 @@ for model in models:
 
             #save the dataframe to a csv file, remove enters from the text
             df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-            df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+            df_answers.to_csv(f"Experiments/1_LLMs/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
