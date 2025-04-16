@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/873737727166887591/85f9b5da45f943d1a36857cc5f89b91f/artifacts
+end_time: 1744795056529
+entry_point_name: ''
+experiment_id: '873737727166887591'
+lifecycle_stage: active
+run_id: 85f9b5da45f943d1a36857cc5f89b91f
+run_name: llama3.2_k10_0416_1114_bbq_experiment
+run_uuid: 85f9b5da45f943d1a36857cc5f89b91f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744795033598
+status: 3
+tags: []
+user_id: lisap
