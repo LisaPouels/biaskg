@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/873737727166887591/a45c7ef979ba4dce8285c46a22553d26/artifacts
+end_time: 1744794478175
+entry_point_name: ''
+experiment_id: '873737727166887591'
+lifecycle_stage: active
+run_id: a45c7ef979ba4dce8285c46a22553d26
+run_name: gemini-2.0-flash_k2_0416_1020_bbq_experiment
+run_uuid: a45c7ef979ba4dce8285c46a22553d26
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744794470243
+status: 3
+tags: []
+user_id: lisap
