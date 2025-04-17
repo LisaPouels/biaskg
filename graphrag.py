@@ -20,7 +20,7 @@ from gemini_llm import GeminiLLM
 from time import sleep
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment")
+mlflow.set_experiment("GraphRAG_Experiment1a_LLM")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -127,8 +127,8 @@ df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=Tru
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
-# models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"]
-models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "deepseek-v2"] # just the ollama models
+models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
+# models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
 # models = ["deepseek-v2"]
 sleep_time = 0
 # k_values = [2,3,5,10]
@@ -214,4 +214,4 @@ for model in models:
 
             #save the dataframe to a csv file, remove enters from the text
             df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-            df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+            df_answers.to_csv(f"Experiments/1_LLM/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
