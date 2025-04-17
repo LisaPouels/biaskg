@@ -128,7 +128,8 @@ df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=Tru
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"]
-models = ["deepseek-v2"]
+models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "deepseek-v2"] # just the ollama models
+# models = ["deepseek-v2"]
 sleep_time = 0
 # k_values = [2,3,5,10]
 k_values = [5] # default, from biasKG paper
