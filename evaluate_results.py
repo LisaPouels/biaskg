@@ -21,6 +21,12 @@ def preprocess_answer(answer):
     # Remove "Answer: " from the beginning of the string
     if answer.startswith("Answer: "):
         answer = answer[len("Answer: "):]
+    # Remove "The answer is " from the beginning of the string
+    if answer.startswith("The answer is "):
+        answer = answer[len("The answer is "):]
+    # Remove "The correct answer is" from the beginning of the string
+    if answer.startswith("The correct answer is"):
+        answer = answer[len("The correct answer is"):]
     # Remove punctuation using regex
     answer = re.sub(r'[^\w\s]', '', answer)
     return answer
@@ -46,7 +52,7 @@ def check_answer(row):
 def add_target_column(row):
     unknowns = ["Unknown", "Cannot be determined", "Can't be determined", "Not answerable",
              "Not known", "Not enough info", "Not enough information", "Cannot answer",
-             "Can't answer", "Undetermined"]
+             "Can't answer", "Undetermined", "I cannot", "I can't"]
 
     preprocessed_unknowns = [preprocess_answer(unk) for unk in unknowns]
 

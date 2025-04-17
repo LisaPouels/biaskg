@@ -20,7 +20,7 @@ from gemini_llm import GeminiLLM
 from time import sleep
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment1_LLMs")
+mlflow.set_experiment("GraphRAG_Experiment")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -127,10 +127,11 @@ df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=Tru
 
 dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 
-models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"]
-# models = ["gemini-2.0-flash"]
+# models = ["mistral", "llama3.2", "qwen2.5", "deepseek-r1", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"]
+models = ["deepseek-v2"]
 sleep_time = 0
-k_values = [2,3,5,10]
+# k_values = [2,3,5,10]
+k_values = [5] # default, from biasKG paper
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M") # set the timestamp for the experiment
 
 # 5. Loop through the models and k values
@@ -185,7 +186,8 @@ for model in models:
                 question = prompts.iloc[i]['question']
                 context = prompts.iloc[i]['context']
                 answer_options =  prompts.iloc[i]['ans0'],prompts.iloc[i]['ans1'],prompts.iloc[i]['ans2']
-                query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
+                # query_text = f"{context} {question} Answer with one of the following options: {answer_options}"
+                query_text = f"{context} {question} Answer with one of the following options: {answer_options}. Start with the correct answer option so it can be checked, optionally follow it with an explanation."
 
                 response = rag.search(query_text=query_text, retriever_config={"top_k": k, "query_params": {"k": k}}, return_context=True)
                 # add response to df_answers together with the context and question
@@ -211,4 +213,4 @@ for model in models:
 
             #save the dataframe to a csv file, remove enters from the text
             df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-            df_answers.to_csv(f"Experiments/1_LLMs/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+            df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
