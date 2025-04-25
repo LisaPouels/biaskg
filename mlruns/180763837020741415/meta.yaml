@@ -1,0 +1,6 @@
+artifact_location: file:///home/lisap/biaskg/mlruns/180763837020741415
+creation_time: 1745584629325
+experiment_id: '180763837020741415'
+last_update_time: 1745584629325
+lifecycle_stage: active
+name: GraphRAG_Experiment2a_Retriever_K_value

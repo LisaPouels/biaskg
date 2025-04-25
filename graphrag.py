@@ -20,7 +20,7 @@ from gemini_llm import GeminiLLM
 from time import sleep
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment1a_LLM")
+mlflow.set_experiment("GraphRAG_Experiment2a_Retriever_K_value")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -131,8 +131,8 @@ models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-na
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
 # models = ["deepseek-v2"]
 sleep_time = 0
-# k_values = [2,3,5,10]
-k_values = [5] # default, from biasKG paper
+k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
+# k_values = [5] # default, from biasKG paper
 timestamp = pd.Timestamp.now().strftime("%m%d_%H%M") # set the timestamp for the experiment
 
 # 5. Loop through the models and k values
@@ -214,4 +214,4 @@ for model in models:
 
             #save the dataframe to a csv file, remove enters from the text
             df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-            df_answers.to_csv(f"Experiments/1_LLM/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+            df_answers.to_csv(f"Experiments/2_Retriever/2a_k_value/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
