@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/180763837020741415/77dbb184e4614a2ca1f226f8a9dba0f0/artifacts
+end_time: 1745923626014
+entry_point_name: ''
+experiment_id: '180763837020741415'
+lifecycle_stage: active
+run_id: 77dbb184e4614a2ca1f226f8a9dba0f0
+run_name: qwen2.5_k1_0429_1240_bbq_experiment
+run_uuid: 77dbb184e4614a2ca1f226f8a9dba0f0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745923553498
+status: 3
+tags: []
+user_id: lisap
