@@ -18,7 +18,6 @@ from vertexai.generative_models import GenerationConfig
 import google.generativeai as genai
 from gemini_llm import GeminiLLM
 from time import sleep
-from flashrank import Ranker, RerankRequest
 
 # Set the experiment name
 # mlflow.set_experiment("GraphRAG_Experiment")
@@ -35,7 +34,7 @@ neo4j_uri = os.getenv("NEO4J_URI")
 neo4j_user = os.getenv("NEO4J_USERNAME")
 neo4j_password = os.getenv("NEO4J_PASSWORD")
 
-driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password), notifications_min_severity="OFF") # connect to the database
+driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password)) # connect to the database
 
 # 2. Embedding
 embedder = OllamaEmbeddings(model="nomic-embed-text") # set the embedding model
@@ -54,13 +53,6 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
     The content is a string that contains the start node, the relationship, and the end node.
     The metadata includes the start node and the score.
     """
-    #TODO: check if the max_length is correct
-    # ranker = Ranker(max_length=128)
-    #TODO: find a way to get the query to the reranker
-    #TODO: check what the format for the passages should be (dict, with id?)
-    # rerankrequest = RerankRequest(query=query, passages=record)
-    # results = ranker.rerank(rerankrequest)
-
     content=""
     for i in range(len(record.get('top_triplets'))):
         content += f"{record.get('top_triplets')[i].get('subject')} {record.get('top_triplets')[i].get('relationship')} {record.get('top_triplets')[i].get('object')},"
@@ -72,22 +64,42 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
         }
     )
 
-# define the retrieval query - pagerank query
+# define the retrieval query
 retrieval_query = """
+    // Step 1: Find neighbors of the retrieved node
     MATCH (node)-[r:RELATIONSHIP]->(e:EndNode)
-    WITH node, r, e
-    ORDER BY node
-    WITH collect({subject: node.text, relationship: r.text, object: e.text}) AS top_triplets, node AS c_node
-    CALL gds.pageRank.stream('myGraph', {
-        maxIterations: 20,
-        dampingFactor: 0.85,
-        sourceNodes: [id(c_node)]
-    })
-    YIELD nodeId, score
-    WHERE id(c_node) = nodeId
-    RETURN c_node.text, top_triplets, score
-    ORDER BY score DESC
-    LIMIT $k
+
+    // Step 2: Compute cosine similarity manually between input and e
+    WITH node, r, e,
+        gds.similarity.cosine(node.embedding, e.embedding) AS e_similarity,
+        score AS node_similarity // manually preserve the score for 'node'
+
+    // Step 3: Top-k neighbors based on similarity
+    ORDER BY e_similarity DESC
+    WITH node, node_similarity, COLLECT(DISTINCT {entity: e, sim: e_similarity})[0..$top_k] AS top_e
+
+    // Step 4: Combine node + top_e into one list
+    WITH node, node_similarity,
+        [{entity: node, sim: node_similarity}] + top_e AS nodes
+
+    UNWIND nodes AS entity_info
+    WITH node, entity_info.entity AS n, entity_info.sim AS similarity
+
+    // Step 5: Get all outgoing edges for all relevant nodes
+    MATCH (n)-[r1:RELATIONSHIP]->(e1:EndNode)
+
+    // Step 6: Collect and rank triplets
+    WITH node, n, r1, e1, similarity
+    ORDER BY similarity DESC
+    WITH node,
+        COLLECT({subject: n.text, relationship: r1.text, object: e1.text}) AS triplets,
+        AVG(similarity) AS avg_similarity
+
+    // Step 7: Return
+    RETURN
+        node.text AS node,
+        avg_similarity AS score,
+        triplets[0..$top_k] AS top_triplets
 """
 # initialize the retriever
 retriever = VectorCypherRetriever(
@@ -100,8 +112,7 @@ retriever = VectorCypherRetriever(
 
 # 4. Load the user prompts
 data_path = os.getenv("DATA_PATH")
-# n_prompts = os.getenv("N_PROMPTS") # number of prompts to sample
-n_prompts = 10
+n_prompts = os.getenv("N_PROMPTS") # number of prompts to sample
 
 df_bbq = pd.read_csv(data_path)
 if n_prompts == 'None' or n_prompts == None or n_prompts == "":
@@ -119,7 +130,7 @@ df_prompts = df_bbq.sample(int(n_prompts), random_state=42).reset_index(drop=Tru
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
-models = ["qwen2.5"]
+models = ["qwen3"]
 sleep_time = 0
 # k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
 k_values = [5] # default, from biasKG paper
