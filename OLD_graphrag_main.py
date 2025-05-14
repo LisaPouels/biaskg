@@ -13,10 +13,10 @@ import pandas as pd
 from dotenv import load_dotenv
 import mlflow
 from mlflow.data.pandas_dataset import PandasDataset
-from evaluate_results import evaluate_results
+from components.evaluate_results import evaluate_results
 from vertexai.generative_models import GenerationConfig
 import google.generativeai as genai
-from gemini_llm import GeminiLLM
+from components.gemini_llm import GeminiLLM
 from time import sleep
 
 # Set the experiment name

@@ -4,7 +4,7 @@ import mlflow
 from components.evaluate_results import evaluate_results
 from components.generation import initialize_llm, build_query_prompt
 
-def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query):
+def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query, retriever_name, retriever_type):
     llm, override_sample_size = initialize_llm(model)
     sample_size = override_sample_size or len(df_prompts)
 
@@ -17,11 +17,12 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
 
     rag = GraphRAG(retriever=retriever, llm=llm)
 
-    with mlflow.start_run(run_name=f"{model}_k{k}_{timestamp}_bbq_experiment"):
+    with mlflow.start_run(run_name=f"{model}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment"):
         mlflow.log_param("model", model)
-        mlflow.log_param("retriever", "VectorCypherRetriever")
+        mlflow.log_param("retriever", retriever_name)
         mlflow.log_param("embedder model", "nomic-embed-text")
         mlflow.log_param("retrieval query", retrieval_query)
+        mlflow.log_param("retriever type", retriever_type)
         mlflow.log_param("sample size", sample_size)
         mlflow.log_param("k", k)
         mlflow.log_input(dataset)
@@ -53,4 +54,4 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
             df_answers[name.replace("accuracy_", "Accuracy_").replace("bias_", "Bias_")] = val
 
         df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-        df_answers.to_csv(f"Experiments/{model}_k{k}_{timestamp}_bbq_experiment.csv", index=False)
+        df_answers.to_csv(f"Experiments/{model}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
