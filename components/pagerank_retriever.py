@@ -18,7 +18,6 @@ from vertexai.generative_models import GenerationConfig
 import google.generativeai as genai
 from gemini_llm import GeminiLLM
 from time import sleep
-from flashrank import Ranker, RerankRequest
 
 # Set the experiment name
 # mlflow.set_experiment("GraphRAG_Experiment")
@@ -54,12 +53,6 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
     The content is a string that contains the start node, the relationship, and the end node.
     The metadata includes the start node and the score.
     """
-    #TODO: check if the max_length is correct
-    # ranker = Ranker(max_length=128)
-    #TODO: find a way to get the query to the reranker
-    #TODO: check what the format for the passages should be (dict, with id?)
-    # rerankrequest = RerankRequest(query=query, passages=record)
-    # results = ranker.rerank(rerankrequest)
 
     content=""
     for i in range(len(record.get('top_triplets'))):

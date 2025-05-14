@@ -1,4 +1,3 @@
-import pandas as pd
 import regex as re
 
 def add_correct_column(row):

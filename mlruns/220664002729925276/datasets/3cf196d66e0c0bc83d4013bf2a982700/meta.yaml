@@ -1,0 +1,23 @@
+digest: eda4477a
+name: bbq_sample
+profile: '{"num_rows": 10, "num_elements": 220}'
+schema: '{"mlflow_colspec": [{"type": "long", "name": "example_id", "required": true},
+  {"type": "long", "name": "question_index", "required": true}, {"type": "string",
+  "name": "question_polarity", "required": true}, {"type": "string", "name": "context_condition",
+  "required": true}, {"type": "string", "name": "category", "required": true}, {"type":
+  "string", "name": "answer_info", "required": true}, {"type": "string", "name": "additional_metadata",
+  "required": true}, {"type": "string", "name": "context", "required": true}, {"type":
+  "string", "name": "question", "required": true}, {"type": "string", "name": "ans0",
+  "required": true}, {"type": "string", "name": "ans1", "required": true}, {"type":
+  "string", "name": "ans2", "required": true}, {"type": "long", "name": "label", "required":
+  true}, {"type": "double", "name": "target_loc", "required": true}, {"type": "string",
+  "name": "label_type", "required": true}, {"type": "double", "name": "Known_stereotyped_race",
+  "required": false}, {"type": "double", "name": "Known_stereotyped_var2", "required":
+  false}, {"type": "string", "name": "Relevant_social_values", "required": true},
+  {"type": "double", "name": "corr_ans_aligns_var2", "required": false}, {"type":
+  "double", "name": "corr_ans_aligns_race", "required": false}, {"type": "double",
+  "name": "full_cond", "required": false}, {"type": "string", "name": "Known_stereotyped_groups",
+  "required": true}]}'
+source: '{"tags": {"mlflow.user": "lisap", "mlflow.source.name": "main.py", "mlflow.source.type":
+  "LOCAL", "mlflow.source.git.commit": "2d8eaa6ebe88b11925db59fcd138415adf0219d3"}}'
+source_type: code
