@@ -130,7 +130,7 @@ dataset = mlflow.data.from_pandas(df_prompts, name="bbq_sample")
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
-models = ["qwen3"]
+models = ["qwen2.5"]
 sleep_time = 0
 # k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
 k_values = [5] # default, from biasKG paper

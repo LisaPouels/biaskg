@@ -5,7 +5,7 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 import mlflow
-from components.retriever import result_formatter, RETRIEVAL_QUERY_SIMILARITY, RETRIEVAL_QUERY_PAGERANK
+from components.retriever import result_formatter, prepare_pagerank_projection ,RETRIEVAL_QUERY_SIMILARITY, RETRIEVAL_QUERY_PAGERANK
 from components.runner import run_experiment
 from components.reranker import RerankableRetriever
 import logging
@@ -14,7 +14,8 @@ logger = logging.getLogger("httpx")
 logger.setLevel(logging.WARNING)
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment")
+mlflow.set_experiment("GraphRAG_Experiment2b_Retriever")
+# mlflow.set_experiment("GraphRAG_Experiment")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -60,9 +61,9 @@ retrievers = [
 
 # 5. Generation
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
-# models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
+models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
-models = ["qwen2.5"]
+# models = ["qwen2.5"]
 sleep_time = 0
 # k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
 k_values = [5] # default, from biasKG paper
@@ -88,6 +89,8 @@ for retriever_name, retrieval_query, retriever_type in retrievers:
         )
     else:
         raise ValueError(f"Unknown retriever name: {retriever_name}")
+    if retriever_type == "Pagerank":
+        prepare_pagerank_projection(driver)
     # Loop through the models and k values
     for model in models:
         for k in k_values:

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/249409523655763699/5498d1706d704cda89e6a1d9d942e678/artifacts
+end_time: 1747313777879
+entry_point_name: ''
+experiment_id: '249409523655763699'
+lifecycle_stage: active
+run_id: 5498d1706d704cda89e6a1d9d942e678
+run_name: qwen2.5_k5_Reranker_Original_0515_1152_bbq_experiment
+run_uuid: 5498d1706d704cda89e6a1d9d942e678
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747312546426
+status: 3
+tags: []
+user_id: lisap

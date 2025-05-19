@@ -26,6 +26,40 @@ def result_formatter(record: neo4j.Record) -> RetrieverResultItem:
         }
     )
 
+def prepare_pagerank_projection(driver):
+    """
+    Prepare the graph projection for PageRank.
+    This function creates a graph projection in Neo4j for PageRank algorithm.
+    """
+    # Check if the graph already exists
+    with driver.session() as session:
+        result = session.run("""
+                CALL gds.graph.list()
+                YIELD graphName, nodeCount, relationshipCount
+                RETURN graphName, nodeCount, relationshipCount
+                ORDER BY graphName ASC
+                """)
+        record = result.data()
+        if not record:
+            print("No graph projection found. Creating a new one.")
+            
+            # Create the graph projection
+            with driver.session() as session:
+                session.run("""
+                    CALL gds.graph.project(
+                        'myGraph',
+                        ['StartNode', 'EndNode'],
+                        {
+                            RELATIONSHIP: {
+                                type: 'RELATIONSHIP',
+                                orientation: 'UNDIRECTED'
+                            }
+                        }
+                    )
+                    """)
+            print("Graph projection created.")
+    
+
 # define the retrieval query
 RETRIEVAL_QUERY_SIMILARITY = """
     // Step 1: Find neighbors of the retrieved node

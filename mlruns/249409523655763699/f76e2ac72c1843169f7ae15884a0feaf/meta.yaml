@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/249409523655763699/f76e2ac72c1843169f7ae15884a0feaf/artifacts
+end_time: 1747400912623
+entry_point_name: ''
+experiment_id: '249409523655763699'
+lifecycle_stage: active
+run_id: f76e2ac72c1843169f7ae15884a0feaf
+run_name: llama3.2_k5_Reranker_Original_0516_1101_bbq_experiment
+run_uuid: f76e2ac72c1843169f7ae15884a0feaf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747400499625
+status: 3
+tags: []
+user_id: lisap

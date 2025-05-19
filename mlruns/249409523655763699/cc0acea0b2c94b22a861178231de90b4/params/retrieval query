@@ -1,0 +1,15 @@
+
+    MATCH (node)-[r:RELATIONSHIP]->(e:EndNode)
+    WITH node, r, e
+    ORDER BY node
+    WITH collect({subject: node.text, relationship: r.text, object: e.text}) AS top_triplets, node AS c_node
+    CALL gds.pageRank.stream('myGraph', {
+        maxIterations: 20,
+        dampingFactor: 0.85,
+        sourceNodes: [id(c_node)]
+    })
+    YIELD nodeId, score
+    WHERE id(c_node) = nodeId
+    RETURN c_node.text, top_triplets, score
+    ORDER BY score DESC
+    LIMIT $k

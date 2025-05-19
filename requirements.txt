@@ -10,3 +10,4 @@ ollama==0.4.7
 openai==1.70.0
 pandas==2.2.3
 vertexai==1.71.1
+progressbar==2.5
