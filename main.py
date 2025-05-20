@@ -62,6 +62,7 @@ retrievers = [
 # 5. Generation
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
 models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
+# models = ["llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] 
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
 # models = ["qwen2.5"]
 sleep_time = 0
