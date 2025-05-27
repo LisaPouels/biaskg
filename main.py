@@ -14,8 +14,8 @@ logger = logging.getLogger("httpx")
 logger.setLevel(logging.WARNING)
 
 # Set the experiment name
-mlflow.set_experiment("GraphRAG_Experiment2b_Retriever")
-# mlflow.set_experiment("GraphRAG_Experiment")
+# mlflow.set_experiment("GraphRAG_Experiment2b_Retriever")
+mlflow.set_experiment("GraphRAG_Experiment")
 
 # Load environment variables from .env file
 load_dotenv(override=True)
@@ -54,17 +54,41 @@ embedder = OllamaEmbeddings(model="nomic-embed-text") # set the embedding model
 # 4. Retriever
 retrievers = [
     ("Original", RETRIEVAL_QUERY_SIMILARITY, "Original"),
-    ("Original", RETRIEVAL_QUERY_PAGERANK, "Pagerank"),
-    ("Reranker", RETRIEVAL_QUERY_SIMILARITY, "Original"),
-    ("Reranker", RETRIEVAL_QUERY_PAGERANK, "Pagerank"),
+    # ("Original", RETRIEVAL_QUERY_PAGERANK, "Pagerank"),
+    # ("Reranker", RETRIEVAL_QUERY_SIMILARITY, "Original"),
+    # ("Reranker", RETRIEVAL_QUERY_PAGERANK, "Pagerank"),
 ]
 
-# 5. Generation
+# 5. Prompt perturbations
+perturbation_list = [
+    "original",
+    # "character_replacement",
+    # "character_deletion",
+    # "character_insertion",
+    # "character_swap",
+    "keyboard_typos",
+    # "optical_character_recognition",
+    "synonym_replacement",
+    # "word_swap",
+    # "word_insertion",
+    # "word_deletion",
+    # "insert_punctuation",
+    # "word_split",
+    "back_translation_hugging_face",
+    # "back_translation_google",
+    # "paraphrase",
+    # "formalization",
+    # "casualization",
+    "passive_voice",
+    # "active_voice"
+]
+
+# 6. Generation
 # models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano", "gemini-2.0-flash"] #all models
-models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
+# models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
 # models = ["llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] 
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
-# models = ["qwen2.5"]
+models = ["qwen2.5"]
 sleep_time = 0
 # k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
 k_values = [5] # default, from biasKG paper
@@ -92,8 +116,10 @@ for retriever_name, retrieval_query, retriever_type in retrievers:
         raise ValueError(f"Unknown retriever name: {retriever_name}")
     if retriever_type == "Pagerank":
         prepare_pagerank_projection(driver)
-    # Loop through the models and k values
-    for model in models:
-        for k in k_values:
-            print(f"Running experiments for LLM={model} with k={k}, retriever={retriever_name}, retriever type={retriever_type}")
-            run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query, retriever_name, retriever_type)
+
+    for perturbation in perturbation_list:
+        # Loop through the models and k values
+        for model in models:
+            for k in k_values:
+                print(f"Running experiments for LLM={model} with k={k}, retriever={retriever_name}, retriever type={retriever_type}, perturbation={perturbation}")
+                run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query, retriever_name, retriever_type, perturbation)

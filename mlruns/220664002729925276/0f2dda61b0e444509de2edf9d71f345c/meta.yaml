@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/0f2dda61b0e444509de2edf9d71f345c/artifacts
+end_time: 1748346996352
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: 0f2dda61b0e444509de2edf9d71f345c
+run_name: qwen2.5_back_translation_hugging_face_k5_Original_Original_0527_1355_bbq_experiment
+run_uuid: 0f2dda61b0e444509de2edf9d71f345c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748346981297
+status: 4
+tags: []
+user_id: lisap

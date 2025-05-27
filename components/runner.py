@@ -5,7 +5,7 @@ from components.evaluate_results import evaluate_results
 from components.generation import initialize_llm, build_query_prompt
 import progressbar
 
-def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query, retriever_name, retriever_type):
+def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieval_query, retriever_name, retriever_type, perturbation):
     llm, override_sample_size = initialize_llm(model)
     sample_size = override_sample_size or len(df_prompts)
 
@@ -18,7 +18,7 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
 
     rag = GraphRAG(retriever=retriever, llm=llm)
 
-    with mlflow.start_run(run_name=f"{model}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment"):
+    with mlflow.start_run(run_name=f"{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment"):
         mlflow.log_param("model", model)
         mlflow.log_param("retriever", retriever_name)
         mlflow.log_param("embedder model", "nomic-embed-text")
@@ -32,7 +32,7 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
         bar.start()
 
         for i, row in prompts.iterrows():
-            query_text = build_query_prompt(row['context'], row['question'], row['ans0'], row['ans1'], row['ans2'])
+            query_text = build_query_prompt(row['context'], row['question'], row['ans0'], row['ans1'], row['ans2'], perturbation)
             response = rag.search(query_text=query_text, retriever_config={"top_k": k, "query_params": {"k": k}}, return_context=True)
 
             df_answers = pd.concat([df_answers, pd.DataFrame({
@@ -59,4 +59,5 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
             df_answers[name.replace("accuracy_", "Accuracy_").replace("bias_", "Bias_")] = val
 
         df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-        df_answers.to_csv(f"Experiments/2_Retriever/2b_Retriever/{model}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        # df_answers.to_csv(f"Experiments/3_Prompts/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        df_answers.to_csv(f"Experiments/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)

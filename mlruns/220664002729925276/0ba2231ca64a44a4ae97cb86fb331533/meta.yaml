@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/220664002729925276/0ba2231ca64a44a4ae97cb86fb331533/artifacts
+end_time: 1748347041543
+entry_point_name: ''
+experiment_id: '220664002729925276'
+lifecycle_stage: active
+run_id: 0ba2231ca64a44a4ae97cb86fb331533
+run_name: qwen2.5_keyboard_typos_k5_Original_Original_0527_1357_bbq_experiment
+run_uuid: 0ba2231ca64a44a4ae97cb86fb331533
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748347035550
+status: 3
+tags: []
+user_id: lisap
