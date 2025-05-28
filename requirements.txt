@@ -12,6 +12,7 @@ openai==1.70.0
 pandas==2.2.3
 progressbar==2.5
 sacremoses==0.1.1
+seaborn==0.13.2
 sentencepiece==0.2.0
 sentence-transformers==4.1.0
 sklearn-pandas==2.2.0

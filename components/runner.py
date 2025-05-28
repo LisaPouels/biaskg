@@ -59,5 +59,5 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
             df_answers[name.replace("accuracy_", "Accuracy_").replace("bias_", "Bias_")] = val
 
         df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-        # df_answers.to_csv(f"Experiments/3_Prompts/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
-        df_answers.to_csv(f"Experiments/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        df_answers.to_csv(f"Experiments/3_Prompts/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        # df_answers.to_csv(f"Experiments/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)

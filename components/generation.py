@@ -54,8 +54,8 @@ def prompt_perturbation(prompt, perturbation_type, level=0.05):
         perturbed_prompt = word_tool.word_split()
     elif perturbation_type == "back_translation_hugging_face":  
         perturbed_prompt = sentence_tool.back_translation_hugging_face()
-    elif perturbation_type == "back_translation_google":
-        perturbed_prompt = sentence_tool.back_translation_google()
+    # elif perturbation_type == "back_translation_google":
+    #     perturbed_prompt = sentence_tool.back_translation_google()
     elif perturbation_type == "paraphrase":
         perturbed_prompt = sentence_tool.paraphrase()
     elif perturbation_type == "formalization":
