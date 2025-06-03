@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/db591eb5ed7141fca8fb59ce77ce43c9/artifacts
+end_time: 1748439241710
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: db591eb5ed7141fca8fb59ce77ce43c9
+run_name: deepseek-v2_back_translation_hugging_face_k5_Original_Original_0528_1133_bbq_experiment
+run_uuid: db591eb5ed7141fca8fb59ce77ce43c9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748438523432
+status: 3
+tags: []
+user_id: lisap

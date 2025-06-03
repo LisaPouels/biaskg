@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/1fd2c6a3f9474dd19a875924616cb5ad/artifacts
+end_time: 1748428807200
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 1fd2c6a3f9474dd19a875924616cb5ad
+run_name: falcon_keyboard_typos_k5_Original_Original_0528_1133_bbq_experiment
+run_uuid: 1fd2c6a3f9474dd19a875924616cb5ad
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748428685204
+status: 3
+tags: []
+user_id: lisap

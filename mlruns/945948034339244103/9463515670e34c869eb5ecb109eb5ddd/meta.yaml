@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/9463515670e34c869eb5ecb109eb5ddd/artifacts
+end_time: 1748871527014
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 9463515670e34c869eb5ecb109eb5ddd
+run_name: deepseek-v2_passive_voice_k5_Original_Original_0602_1136_bbq_experiment
+run_uuid: 9463515670e34c869eb5ecb109eb5ddd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748871166692
+status: 3
+tags: []
+user_id: lisap

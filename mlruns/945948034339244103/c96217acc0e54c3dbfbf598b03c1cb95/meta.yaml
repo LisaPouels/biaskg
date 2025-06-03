@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/c96217acc0e54c3dbfbf598b03c1cb95/artifacts
+end_time: 1748427525564
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: c96217acc0e54c3dbfbf598b03c1cb95
+run_name: mistral_character_swap_k5_Original_Original_0528_1133_bbq_experiment
+run_uuid: c96217acc0e54c3dbfbf598b03c1cb95
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748427450523
+status: 3
+tags: []
+user_id: lisap

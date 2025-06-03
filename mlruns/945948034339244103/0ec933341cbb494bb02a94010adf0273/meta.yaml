@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/0ec933341cbb494bb02a94010adf0273/artifacts
+end_time: 1748900983081
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 0ec933341cbb494bb02a94010adf0273
+run_name: llama3.2_optical_character_recognition_k5_Original_Original_0602_2239_bbq_experiment
+run_uuid: 0ec933341cbb494bb02a94010adf0273
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748900958047
+status: 3
+tags: []
+user_id: lisap

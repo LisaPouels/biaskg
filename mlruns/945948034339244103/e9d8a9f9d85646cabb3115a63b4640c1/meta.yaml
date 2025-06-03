@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/e9d8a9f9d85646cabb3115a63b4640c1/artifacts
+end_time: 1748860968648
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: e9d8a9f9d85646cabb3115a63b4640c1
+run_name: deepseek-v2_paraphrase_k5_Original_Original_0602_1136_bbq_experiment
+run_uuid: e9d8a9f9d85646cabb3115a63b4640c1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748859978534
+status: 3
+tags: []
+user_id: lisap
