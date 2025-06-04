@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/9ceb00b618a145ce93aeb9eec0f1a4ed/artifacts
+end_time: 1748938602215
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 9ceb00b618a145ce93aeb9eec0f1a4ed
+run_name: gpt-4.1-nano_keyboard_typos_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: 9ceb00b618a145ce93aeb9eec0f1a4ed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748938504089
+status: 3
+tags: []
+user_id: lisap

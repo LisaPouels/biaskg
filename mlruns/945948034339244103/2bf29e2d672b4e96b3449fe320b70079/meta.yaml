@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/2bf29e2d672b4e96b3449fe320b70079/artifacts
+end_time: 1748937949206
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 2bf29e2d672b4e96b3449fe320b70079
+run_name: mistral_keyboard_typos_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: 2bf29e2d672b4e96b3449fe320b70079
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748937875005
+status: 3
+tags: []
+user_id: lisap

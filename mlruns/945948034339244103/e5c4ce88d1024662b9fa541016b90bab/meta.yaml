@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/e5c4ce88d1024662b9fa541016b90bab/artifacts
+end_time: 1748938675940
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: e5c4ce88d1024662b9fa541016b90bab
+run_name: mistral_optical_character_recognition_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: e5c4ce88d1024662b9fa541016b90bab
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748938602271
+status: 3
+tags: []
+user_id: lisap
