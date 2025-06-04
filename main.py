@@ -61,25 +61,25 @@ retrievers = [
 
 # 5. Prompt perturbations
 perturbation_list = [
-    "original",
-    "character_replacement",
-    "character_deletion",
-    "character_insertion",
-    "character_swap",
-    "keyboard_typos",
-    "optical_character_recognition",
-    "synonym_replacement",
-    "word_swap",
-    "word_insertion",
-    "word_deletion",
-    "insert_punctuation",
-    "word_split",
-    "back_translation_hugging_face",
-    # "back_translation_google",
-    "paraphrase",
-    "formalization",
-    "casualization",
-    "passive_voice",
+    # "original",
+    # "character_replacement",
+    # "character_deletion",
+    # "character_insertion",
+    # "character_swap",
+    # "keyboard_typos",
+    # "optical_character_recognition",
+    # "synonym_replacement",
+    # "word_swap",
+    # "word_insertion",
+    # "word_deletion",
+    # "insert_punctuation",
+    # "word_split",
+    # "back_translation_hugging_face",
+    # # "back_translation_google",
+    # "paraphrase",
+    # "formalization",
+    # "casualization",
+    # "passive_voice",
     "active_voice"
 ]
 
@@ -88,7 +88,7 @@ perturbation_list = [
 models = ["mistral", "llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] #all models except gemini
 # models = ["llama3.2", "qwen2.5", "deepseek-v2", "falcon", "gpt-4.1-nano"] 
 # models = ["mistral", "llama3.2", "qwen2.5", "falcon", "deepseek-v2"] # just the ollama models
-# models = ["qwen2.5"]
+# models = ["gpt-4.1-nano"]
 sleep_time = 0
 # k_values = [1,3,5,10] # values tested in the biasKG paper, except for 0 which is not possible
 k_values = [5] # default, from biasKG paper

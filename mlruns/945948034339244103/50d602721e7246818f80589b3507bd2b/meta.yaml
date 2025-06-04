@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/50d602721e7246818f80589b3507bd2b/artifacts
+end_time: 1749028131908
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 50d602721e7246818f80589b3507bd2b
+run_name: mistral_back_translation_hugging_face_k5_Original_Original_0604_0901_bbq_experiment
+run_uuid: 50d602721e7246818f80589b3507bd2b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749027426528
+status: 3
+tags: []
+user_id: lisap
