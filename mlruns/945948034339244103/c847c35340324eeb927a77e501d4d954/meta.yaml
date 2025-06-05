@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/c847c35340324eeb927a77e501d4d954/artifacts
+end_time: 1749133832388
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: c847c35340324eeb927a77e501d4d954
+run_name: falcon_formalization_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: c847c35340324eeb927a77e501d4d954
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749133238206
+status: 3
+tags: []
+user_id: lisap

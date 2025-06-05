@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/1e7e371cf7ed49a4b9fa9f9e7263aed4/artifacts
+end_time: 1749124798229
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 1e7e371cf7ed49a4b9fa9f9e7263aed4
+run_name: gpt-4.1-nano_back_translation_hugging_face_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: 1e7e371cf7ed49a4b9fa9f9e7263aed4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749124078563
+status: 3
+tags: []
+user_id: lisap

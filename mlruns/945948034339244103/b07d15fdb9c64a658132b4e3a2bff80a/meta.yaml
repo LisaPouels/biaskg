@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/b07d15fdb9c64a658132b4e3a2bff80a/artifacts
+end_time: 1749119210111
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: b07d15fdb9c64a658132b4e3a2bff80a
+run_name: llama3.2_insert_punctuation_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: b07d15fdb9c64a658132b4e3a2bff80a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749119177847
+status: 3
+tags: []
+user_id: lisap
