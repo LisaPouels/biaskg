@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/af6216fc37964a4990e870744a711a82/artifacts
+end_time: 1749574361795
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: af6216fc37964a4990e870744a711a82
+run_name: mistral_active_voice_k5_Original_Original_0610_1232_bbq_experiment
+run_uuid: af6216fc37964a4990e870744a711a82
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749574045821
+status: 3
+tags: []
+user_id: lisap

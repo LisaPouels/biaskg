@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/7ac7a79674884a7299e36a8308132e0e/artifacts
+end_time: 1749545700280
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 7ac7a79674884a7299e36a8308132e0e
+run_name: gpt-4.1-nano_optical_character_recognition_k5_Original_Original_0610_0927_bbq_experiment
+run_uuid: 7ac7a79674884a7299e36a8308132e0e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749545563531
+status: 3
+tags: []
+user_id: lisap
