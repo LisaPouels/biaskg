@@ -7,6 +7,7 @@ Levenshtein==0.27.1
 mlflow==2.21.3
 neo4j==5.28.1
 neo4j-graphrag==1.6.1
+neo4j-viz==0.4.0
 ollama==0.4.7
 openai==1.70.0
 pandas==2.2.3
