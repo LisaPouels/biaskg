@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/454c4d654aed4057804de59bfdab1c57/artifacts
+end_time: 1748898737718
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 454c4d654aed4057804de59bfdab1c57
+run_name: falcon_character_deletion_k5_Original_Original_0602_2239_bbq_experiment
+run_uuid: 454c4d654aed4057804de59bfdab1c57
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748898643628
+status: 3
+tags: []
+user_id: lisap

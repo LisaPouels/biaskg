@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/5a8f43cdee674e0e93083d91b970fe51/artifacts
+end_time: 1749139676015
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 5a8f43cdee674e0e93083d91b970fe51
+run_name: falcon_passive_voice_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: 5a8f43cdee674e0e93083d91b970fe51
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749139312692
+status: 3
+tags: []
+user_id: lisap

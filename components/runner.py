@@ -13,7 +13,7 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
     df_answers = pd.DataFrame(columns=[
         'context', 'question', 'ans0', 'ans1', 'ans2', 'label',
         'RAG_Answer', 'context_condition', 'question_polarity',
-        'category', 'target_loc', 'retriever_result'
+        'category', 'target_loc', 'retriever_result', 'query_text'
     ])
 
     rag = GraphRAG(retriever=retriever, llm=llm)
@@ -47,7 +47,8 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
                 'question_polarity': row['question_polarity'],
                 'category': row['category'],
                 'target_loc': row['target_loc'],
-                'retriever_result': [response.retriever_result.items]
+                'retriever_result': [response.retriever_result.items],
+                'query_text': query_text
             }, index=[0])], ignore_index=True)
             bar.update(i + 1)
 
@@ -59,5 +60,5 @@ def run_experiment(model, k, df_prompts, retriever, timestamp, dataset, retrieva
             df_answers[name.replace("accuracy_", "Accuracy_").replace("bias_", "Bias_")] = val
 
         df_answers['RAG_Answer'] = df_answers['RAG_Answer'].str.replace('\n', ' ')
-        # df_answers.to_csv(f"Experiments/3_Prompts/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
-        df_answers.to_csv(f"Experiments/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        df_answers.to_csv(f"Experiments/3_Prompts/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)
+        # df_answers.to_csv(f"Experiments/{model}_{perturbation}_k{k}_{retriever_name}_{retriever_type}_{timestamp}_bbq_experiment.csv", index=False)

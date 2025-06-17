@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/5a0dd3b8c9bc43e4b94bf93ca13664cf/artifacts
+end_time: 1749124078506
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 5a0dd3b8c9bc43e4b94bf93ca13664cf
+run_name: falcon_back_translation_hugging_face_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: 5a0dd3b8c9bc43e4b94bf93ca13664cf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749123368145
+status: 3
+tags: []
+user_id: lisap

@@ -22,6 +22,9 @@ from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForSequenceClassification,
 )
+import transformers
+
+transformers.logging.set_verbosity_error()  # Suppress warnings from transformers
 
 adequacy_tag = 'prithivida/parrot_adequacy_model'
 ftc_tag = "prithivida/formal_to_informal_styletransfer"

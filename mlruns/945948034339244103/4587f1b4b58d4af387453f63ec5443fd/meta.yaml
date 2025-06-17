@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/4587f1b4b58d4af387453f63ec5443fd/artifacts
+end_time: 1748944920160
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 4587f1b4b58d4af387453f63ec5443fd
+run_name: gpt-4.1-nano_insert_punctuation_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: 4587f1b4b58d4af387453f63ec5443fd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748944814925
+status: 3
+tags: []
+user_id: lisap

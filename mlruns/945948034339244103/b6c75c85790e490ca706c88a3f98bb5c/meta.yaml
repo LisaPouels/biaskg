@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/b6c75c85790e490ca706c88a3f98bb5c/artifacts
+end_time: 1749546600524
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: b6c75c85790e490ca706c88a3f98bb5c
+run_name: llama3.2_word_swap_k5_Original_Original_0610_0927_bbq_experiment
+run_uuid: b6c75c85790e490ca706c88a3f98bb5c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749546570637
+status: 3
+tags: []
+user_id: lisap

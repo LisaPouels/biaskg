@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/11d5f1cc13d24311a78f4c336e189a5e/artifacts
+end_time: 1749572667092
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 11d5f1cc13d24311a78f4c336e189a5e
+run_name: llama3.2_passive_voice_k5_Original_Original_0610_1232_bbq_experiment
+run_uuid: 11d5f1cc13d24311a78f4c336e189a5e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749572363113
+status: 3
+tags: []
+user_id: lisap

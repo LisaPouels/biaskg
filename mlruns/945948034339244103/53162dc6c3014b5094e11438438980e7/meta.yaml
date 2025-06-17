@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/53162dc6c3014b5094e11438438980e7/artifacts
+end_time: 1749047016279
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 53162dc6c3014b5094e11438438980e7
+run_name: gpt-4.1-nano_passive_voice_k5_Original_Original_0604_0901_bbq_experiment
+run_uuid: 53162dc6c3014b5094e11438438980e7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749046680765
+status: 3
+tags: []
+user_id: lisap

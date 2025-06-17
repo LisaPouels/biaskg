@@ -1,0 +1,35 @@
+
+    // Step 1: Find neighbors of the retrieved node
+    MATCH (node)-[r:RELATIONSHIP]->(e:EndNode)
+
+    // Step 2: Compute cosine similarity manually between input and e
+    WITH node, r, e,
+        gds.similarity.cosine(node.embedding, e.embedding) AS e_similarity,
+        score AS node_similarity // manually preserve the score for 'node'
+
+    // Step 3: Top-k neighbors based on similarity
+    ORDER BY e_similarity DESC
+    WITH node, node_similarity, COLLECT(DISTINCT {entity: e, sim: e_similarity})[0..$top_k] AS top_e
+
+    // Step 4: Combine node + top_e into one list
+    WITH node, node_similarity,
+        [{entity: node, sim: node_similarity}] + top_e AS nodes
+
+    UNWIND nodes AS entity_info
+    WITH node, entity_info.entity AS n, entity_info.sim AS similarity
+
+    // Step 5: Get all outgoing edges for all relevant nodes
+    MATCH (n)-[r1:RELATIONSHIP]->(e1:EndNode)
+
+    // Step 6: Collect and rank triplets
+    WITH node, n, r1, e1, similarity
+    ORDER BY similarity DESC
+    WITH node,
+        COLLECT({subject: n.text, relationship: r1.text, object: e1.text}) AS triplets,
+        AVG(similarity) AS avg_similarity
+
+    // Step 7: Return
+    RETURN
+        node.text AS node,
+        avg_similarity AS score,
+        triplets[0..$top_k] AS top_triplets

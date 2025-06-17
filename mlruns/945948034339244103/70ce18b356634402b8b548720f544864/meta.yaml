@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/70ce18b356634402b8b548720f544864/artifacts
+end_time: 1748904257565
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 70ce18b356634402b8b548720f544864
+run_name: mistral_insert_punctuation_k5_Original_Original_0602_2239_bbq_experiment
+run_uuid: 70ce18b356634402b8b548720f544864
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748904186025
+status: 3
+tags: []
+user_id: lisap

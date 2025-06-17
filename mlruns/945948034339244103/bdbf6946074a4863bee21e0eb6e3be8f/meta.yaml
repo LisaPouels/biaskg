@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/bdbf6946074a4863bee21e0eb6e3be8f/artifacts
+end_time: 1748900290347
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: bdbf6946074a4863bee21e0eb6e3be8f
+run_name: llama3.2_keyboard_typos_k5_Original_Original_0602_2239_bbq_experiment
+run_uuid: bdbf6946074a4863bee21e0eb6e3be8f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748900266173
+status: 3
+tags: []
+user_id: lisap

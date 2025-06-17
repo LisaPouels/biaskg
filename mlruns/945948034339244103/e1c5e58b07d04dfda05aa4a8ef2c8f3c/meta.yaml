@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/e1c5e58b07d04dfda05aa4a8ef2c8f3c/artifacts
+end_time: 1749546496297
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: e1c5e58b07d04dfda05aa4a8ef2c8f3c
+run_name: gpt-4.1-nano_synonym_replacement_k5_Original_Original_0610_0927_bbq_experiment
+run_uuid: e1c5e58b07d04dfda05aa4a8ef2c8f3c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749546330567
+status: 3
+tags: []
+user_id: lisap

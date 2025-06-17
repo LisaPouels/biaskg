@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/d76a5e04ab4641e98fa60552ed650de7/artifacts
+end_time: 1749023022263
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: d76a5e04ab4641e98fa60552ed650de7
+run_name: qwen2.5_optical_character_recognition_k5_Original_Original_0604_0901_bbq_experiment
+run_uuid: d76a5e04ab4641e98fa60552ed650de7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749022730326
+status: 3
+tags: []
+user_id: lisap

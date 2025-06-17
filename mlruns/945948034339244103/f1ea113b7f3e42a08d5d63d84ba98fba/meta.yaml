@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/f1ea113b7f3e42a08d5d63d84ba98fba/artifacts
+end_time: 1748939097140
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: f1ea113b7f3e42a08d5d63d84ba98fba
+run_name: deepseek-v2_optical_character_recognition_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: f1ea113b7f3e42a08d5d63d84ba98fba
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748938994635
+status: 3
+tags: []
+user_id: lisap

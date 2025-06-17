@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/13f614e810e14c30a68960775dc7e0c9/artifacts
+end_time: 1748432889179
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 13f614e810e14c30a68960775dc7e0c9
+run_name: falcon_insert_punctuation_k5_Original_Original_0528_1133_bbq_experiment
+run_uuid: 13f614e810e14c30a68960775dc7e0c9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748432780945
+status: 3
+tags: []
+user_id: lisap

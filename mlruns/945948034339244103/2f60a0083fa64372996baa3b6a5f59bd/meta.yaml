@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/2f60a0083fa64372996baa3b6a5f59bd/artifacts
+end_time: 1749554295332
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 2f60a0083fa64372996baa3b6a5f59bd
+run_name: falcon_word_split_k5_Original_Original_0610_1232_bbq_experiment
+run_uuid: 2f60a0083fa64372996baa3b6a5f59bd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749554188202
+status: 3
+tags: []
+user_id: lisap

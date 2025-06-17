@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/f74510df99cc42138749e2728faee34d/artifacts
+end_time: 1748942616506
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: f74510df99cc42138749e2728faee34d
+run_name: deepseek-v2_word_swap_k5_Original_Original_0603_0906_bbq_experiment
+run_uuid: f74510df99cc42138749e2728faee34d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748942533004
+status: 3
+tags: []
+user_id: lisap

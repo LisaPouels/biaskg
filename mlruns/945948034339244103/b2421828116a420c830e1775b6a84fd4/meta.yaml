@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/b2421828116a420c830e1775b6a84fd4/artifacts
+end_time: 1749114993376
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: b2421828116a420c830e1775b6a84fd4
+run_name: gpt-4.1-nano_character_swap_k5_Original_Original_0605_1017_bbq_experiment
+run_uuid: b2421828116a420c830e1775b6a84fd4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749114901768
+status: 3
+tags: []
+user_id: lisap

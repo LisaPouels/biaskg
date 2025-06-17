@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/3e316ba6dc834f3496f2fc755a8ccd96/artifacts
+end_time: 1748904932436
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: 3e316ba6dc834f3496f2fc755a8ccd96
+run_name: mistral_word_split_k5_Original_Original_0602_2239_bbq_experiment
+run_uuid: 3e316ba6dc834f3496f2fc755a8ccd96
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748904860635
+status: 3
+tags: []
+user_id: lisap

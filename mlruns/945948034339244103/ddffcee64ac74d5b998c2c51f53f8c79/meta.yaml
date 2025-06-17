@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/ddffcee64ac74d5b998c2c51f53f8c79/artifacts
+end_time: 1749545563475
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: ddffcee64ac74d5b998c2c51f53f8c79
+run_name: falcon_optical_character_recognition_k5_Original_Original_0610_0927_bbq_experiment
+run_uuid: ddffcee64ac74d5b998c2c51f53f8c79
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749545408143
+status: 3
+tags: []
+user_id: lisap

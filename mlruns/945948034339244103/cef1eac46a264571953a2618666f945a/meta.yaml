@@ -1,0 +1,15 @@
+artifact_uri: file:///home/lisap/biaskg/mlruns/945948034339244103/cef1eac46a264571953a2618666f945a/artifacts
+end_time: 1749028849730
+entry_point_name: ''
+experiment_id: '945948034339244103'
+lifecycle_stage: active
+run_id: cef1eac46a264571953a2618666f945a
+run_name: llama3.2_back_translation_hugging_face_k5_Original_Original_0604_0901_bbq_experiment
+run_uuid: cef1eac46a264571953a2618666f945a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749028131965
+status: 3
+tags: []
+user_id: lisap
